@@ -27,7 +27,6 @@ void ThinPlateSpline::solve()
                                                                - mSrcPoints[std::size_t(j)]).norm());
 
         mL(j, i) = mL(i, j) = 1.0;
-
         ++j;
 
         for (int posElm(0); j < rows; ++posElm, ++j)
@@ -38,8 +37,7 @@ void ThinPlateSpline::solve()
     Eigen::MatrixXd Y = Eigen::MatrixXd::Zero(rows, 3);
 
     for (int i(0); i < num; ++i)
-        for (int j(0); j < 3; ++j)
-            Y(i, j) = mDstPoints[std::size_t(i)][j];
+        Y.row(i) = mDstPoints[std::size_t(i)];
 
     // Solve L W^T = Y as W^T = L^-1 Y
     mW = mL.colPivHouseholderQr().solve(Y);
@@ -54,18 +52,14 @@ Eigen::Vector3d ThinPlateSpline::interpolate(const Eigen::Vector3d &p) const
 
         double rb = ThinPlateSpline::radialBasis((mSrcPoints[std::size_t(i)] - p).norm());
 
-        for (int j(0); j < 3; ++j)
-            res[j] += mW(i, j) * rb;
+        res += mW.row(i) * rb;
     }
 
-    for (int j(0); j < 3; ++j)
-        res[j] += mW(i, j);
-
+    res += mW.row(i);
     i++;
 
     for (int j(0); j < 3; ++j, ++i)
-        for (int k(0); k < 3; ++k)
-            res[k] += mW(i, k) * p[j];
+        res += mW.row(i) * p[j];
 
     return res;
 }
