@@ -23,8 +23,7 @@ void ThinPlateSpline::solve()
         int j(i + 1);
 
         for (; j < num; ++j)
-            mL(i, j) = mL(j, i) = ThinPlateSpline::radialBasis((mSrcPoints[std::size_t(i)]
-                                                               - mSrcPoints[std::size_t(j)]).norm());
+            mL(i, j) = mL(j, i) = radialBasis((mSrcPoints[std::size_t(i)] - mSrcPoints[std::size_t(j)]).norm());
 
         mL(j, i) = mL(i, j) = 1.0;
         ++j;
@@ -50,7 +49,7 @@ Eigen::Vector3d ThinPlateSpline::interpolate(const Eigen::Vector3d &p) const
 
     for (; i < mW.rows() - (3 + 1); ++i) {
 
-        double rb = ThinPlateSpline::radialBasis((mSrcPoints[std::size_t(i)] - p).norm());
+        double rb = radialBasis((mSrcPoints[std::size_t(i)] - p).norm());
 
         res += mW.row(i) * rb;
     }

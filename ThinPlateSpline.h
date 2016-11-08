@@ -30,7 +30,7 @@ public:
 
 protected:
     /* Radial Basis Function */
-    static double radialBasis(double r) { return r == 0.0 ? r : r * r * log(r); }
+    static inline double radialBasis(double r) { return r == 0.0 ? r : r * r * log(r); }
 
     /* Data */
     std::vector<Eigen::Vector3d> mSrcPoints;
