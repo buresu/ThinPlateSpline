@@ -1,4 +1,4 @@
-#include "ThinPlateSpline.h"
+#include "ThinPlateSpline.hpp"
 #include <Eigen/QR>
 
 ThinPlateSpline::ThinPlateSpline(const std::vector<Eigen::Vector3d> &src,
