@@ -1,13 +1,16 @@
 #pragma once
 
 #include <Eigen/Core>
-#include <vector>
+#include <Eigen/StdVector>
 
 class ThinPlateSpline {
 public:
+  typedef std::vector<Eigen::Vector3d,
+                      Eigen::aligned_allocator<Eigen::Vector3d>>
+      PointList;
+
   ThinPlateSpline() {}
-  ThinPlateSpline(const std::vector<Eigen::Vector3d> &src,
-                  const std::vector<Eigen::Vector3d> &dst);
+  ThinPlateSpline(const PointList &src, const PointList &dst);
   ~ThinPlateSpline() {}
 
   /* Solve */
@@ -17,20 +20,16 @@ public:
   Eigen::Vector3d interpolate(const Eigen::Vector3d &p) const;
 
   /* Source Points */
-  const std::vector<Eigen::Vector3d> &srcPoints() const { return mSrcPoints; }
+  const PointList &srcPoints() const { return mSrcPoints; }
 
   /* Set Source Points */
-  void setSrcPoints(const std::vector<Eigen::Vector3d> &points) {
-    mSrcPoints = points;
-  }
+  void setSrcPoints(const PointList &points) { mSrcPoints = points; }
 
   /* Destination Points */
-  const std::vector<Eigen::Vector3d> &dstPoints() const { return mDstPoints; }
+  const PointList &dstPoints() const { return mDstPoints; }
 
   /* Set Destination Points */
-  void setDstPoints(const std::vector<Eigen::Vector3d> &points) {
-    mDstPoints = points;
-  }
+  void setDstPoints(const PointList &points) { mDstPoints = points; }
 
 protected:
   /* Radial Basis Function */
@@ -39,8 +38,8 @@ protected:
   }
 
   /* Data */
-  std::vector<Eigen::Vector3d> mSrcPoints;
-  std::vector<Eigen::Vector3d> mDstPoints;
+  PointList mSrcPoints;
+  PointList mDstPoints;
   Eigen::MatrixXd mW;
   Eigen::MatrixXd mL;
 };

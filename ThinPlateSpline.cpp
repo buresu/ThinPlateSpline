@@ -1,11 +1,11 @@
 #include "ThinPlateSpline.hpp"
 #include <Eigen/QR>
 
-ThinPlateSpline::ThinPlateSpline(const std::vector<Eigen::Vector3d> &src,
-                                 const std::vector<Eigen::Vector3d> &dst)
+ThinPlateSpline::ThinPlateSpline(const PointList &src, const PointList &dst)
     : mSrcPoints(src), mDstPoints(dst) {}
 
 void ThinPlateSpline::solve() {
+
   if (mSrcPoints.size() != mDstPoints.size())
     return;
 
@@ -41,13 +41,12 @@ void ThinPlateSpline::solve() {
 }
 
 Eigen::Vector3d ThinPlateSpline::interpolate(const Eigen::Vector3d &p) const {
+
   Eigen::Vector3d res = Eigen::Vector3d::Zero();
   int i(0);
 
   for (; i < mW.rows() - (3 + 1); ++i) {
-
     double rb = radialBasis((mSrcPoints[std::size_t(i)] - p).norm());
-
     res += mW.row(i) * rb;
   }
 
